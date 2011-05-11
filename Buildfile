@@ -27,8 +27,8 @@ define 'boost' do
     end
   end
 
-  boom=artifact('com.theice.com.acme:testapp:tar:dinky-thing:1.0.0').from(file('bob.tar'))
-  upload boom
+  boost=artifact("org.boost:libraries:tar.bz2:x64-linux-gcc:#{project.version}").from(file("target/#{boost_dir}_#{x64-linux-gcc}.tar.bz2"))
+  upload boost
 
   clean { rm_rf 'target' }
 
