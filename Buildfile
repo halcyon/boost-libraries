@@ -8,8 +8,6 @@ define 'boost' do
 
   build do
     if not file("target/#{boost_dir}").exist?
-      puts "doctor cox"
-
       if not file(boost_archive).exist?
         system "wget http://downloads.sourceforge.net/project/boost/boost/#{project.version}/#{boost_archive}"
       end
@@ -27,9 +25,8 @@ define 'boost' do
     end
   end
 
-  boost=artifact("org.boost:libraries:tar.bz2:x64-linux-gcc:#{project.version}").from(file("target/#{boost_dir}_#{x64-linux-gcc}.tar.bz2"))
+  boost=artifact("org.boost:libraries:tar.bz2:x64-linux-gcc:#{project.version}").from(file("target/#{boost_dir}_x64-linux-gcc.tar.bz2"))
   upload boost
 
   clean { rm_rf 'target' }
-
 end
