@@ -26,13 +26,15 @@ define 'boost' do
     end
   end
 
-  ARCH.each do |arch|
-    if not file("target/#{eval("\"#{boost_output}\"")}").exist?
-      cd 'target'
-      system "tar jcvf #{eval("\"#{boost_output}\"")} x#{arch}"
+  if file("target").exist?
+    ARCH.each do |arch|
+      if not file("target/#{eval("\"#{boost_output}\"")}").exist?
+        cd 'target'
+        system "tar jcvf #{eval("\"#{boost_output}\"")} x#{arch}"
+      end
+      boost=artifact("org.boost:libraries:tar.bz2:x#{arch}-linux-gcc:#{project.version}").from(file("target/#{eval("\"#{boost_output}\"")}"))
+      upload boost
     end
-    boost=artifact("org.boost:libraries:tar.bz2:x#{arch}-linux-gcc:#{project.version}").from(file("target/#{eval("\"#{boost_output}\"")}"))
-    upload boost
   end
 
 
