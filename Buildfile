@@ -3,8 +3,9 @@ define 'boost' do
   boost_version=project.version.gsub(/\./,'_')
   boost_archive="boost_"+"#{boost_version}"+".tar.bz2"
   boost_dir="boost_#{boost_version}"
-  BUILD_LIB="date_time,filesystem,program_options,regex,serialization,signals,system,test,thread"
   ARCH=['64']
+  boost_output='#{boost_dir}_x#{arch}-linux-gcc.tar.bz2'
+  BUILD_LIB="date_time,filesystem,program_options,regex,serialization,signals,system,test,thread"
 
   build do
     if not file("target/#{boost_dir}").exist?
@@ -25,8 +26,15 @@ define 'boost' do
     end
   end
 
-  boost=artifact("org.boost:libraries:tar.bz2:x64-linux-gcc:#{project.version}").from(file("target/#{boost_dir}_x64-linux-gcc.tar.bz2"))
-  upload boost
+  ARCH.each do |arch|
+    if not file("target/#{eval("\"#{boost_output}\"")}").exist?
+      cd 'target'
+      system "tar jcvf #{eval("\"#{boost_output}\"")} x#{arch}"
+    end
+    boost=artifact("org.boost:libraries:tar.bz2:x#{arch}-linux-gcc:#{project.version}").from(file("target/#{eval("\"#{boost_output}\"")}"))
+    upload boost
+  end
+
 
   clean { rm_rf 'target' }
 end
