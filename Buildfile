@@ -12,7 +12,7 @@ define 'boost' do
       if not file(boost_archive).exist?
         system "wget http://downloads.sourceforge.net/project/boost/boost/#{project.version}/#{boost_archive}"
       end
-      system 'mkdir -p target'
+      mkdir_p 'target'
       cd 'target'
       system "tar jxf ../#{boost_archive}"
       mv Dir.glob("#{boost_dir}/*"), '.'
