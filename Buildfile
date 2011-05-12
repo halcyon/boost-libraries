@@ -22,16 +22,15 @@ define 'boost' do
         flags="cxxflags=-m#{arch} linkflags=-m#{arch} cflags=-m#{arch}"
         mkdir_p stagedir
         system "./bjam -a --toolset=gcc #{flags} address-model=#{arch} --stagedir=#{stagedir} --build-type=complete stage"
+        if not file("#{eval("\"#{boost_output}\"")}").exist?
+          system "tar jcvf #{eval("\"#{boost_output}\"")} x#{arch}"
+        end
       end
     end
   end
 
-  if file("target").exist?
-    ARCH.each do |arch|
-      if not file("target/#{eval("\"#{boost_output}\"")}").exist?
-        cd 'target'
-        system "tar jcvf #{eval("\"#{boost_output}\"")} x#{arch}"
-      end
+  ARCH.each do |arch|
+    if file("target/#{eval("\"#{boost_output}\"")}").exist?
       boost=artifact("org.boost:libraries:tar.bz2:x#{arch}-linux-gcc:#{project.version}").from(file("target/#{eval("\"#{boost_output}\"")}"))
       upload boost
     end
